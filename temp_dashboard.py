@@ -5,14 +5,119 @@ Created on Mon Sep  4 22:13:29 2023
 @author: 91771
 """
 import streamlit as st
-from streamlit_extras import stoggle, stlogo, stbadge, stdataframe_explorer
 import pandas as pd
+from pandas_profiling import ProfileReport
 import plotly.express as px
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
 from statsmodels.tsa.seasonal import seasonal_decompose
 import seaborn as sns
 import matplotlib.pyplot as plt
+
+# Define page functions
+
+def home_page():
+    st.title('Home Page')
+    # Add content for the Home page
+
+def data_page():
+    st.title('View the Data')
+    # Load and display the 'temperature.csv' data
+    data = pd.read_csv('temperature_data.csv')
+    st.write("Temperature Data")
+    st.dataframe(data)
+
+    st.subheader('Pandas Profiling Report')
+    report = ProfileReport(data, explorative=True)
+    st_profile_report(report)
+
+def visualizations_page():
+    st.title('Visualizations Page')
+    # Add content for the Visualizations page
+
+def acknowledgment_page():
+    st.title('Acknowledgment Page')
+    # Add content for the Acknowledgment page
+
+# Create a dictionary to map page names to functions
+pages = {
+    "🏠 Home": home_page,
+    "📈 Data": data_page,
+    "📊 Visualizations": visualizations_page,
+    "🙏 Acknowledgment": acknowledgment_page,
+}
+
+# Create a sidebar with page selection using a selectbox
+st.sidebar.title("Navigation")
+selected_page = st.sidebar.selectbox("Go to", list(pages.keys()))
+
+# Display the selected page content
+pages[selected_page]()
+
+# Create a vertical menu with emoji icons in the sidebar
+st.sidebar.markdown(
+    """
+    <style>
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            background-color: #333;
+            padding: 10px 20px;
+            color: white;
+        }
+
+        .menu-item {
+            font-size: 20px;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <div class="menu-container">
+        <label class="menu-item" onclick="redirectTo('home')">🏠 Home</label>
+        <label class="menu-item" onclick="redirectTo('data')">📈 Data</label>
+        <label class="menu-item" onclick="redirectTo('visualizations')">📊 Visualizations</label>
+        <label class="menu-item" onclick="redirectTo('acknowledgment')">🙏 Acknowledgment</label>
+    </div>
+    <script>
+        function redirectTo(page) {
+            const params = new URLSearchParams(window.location.search);
+            params.set('page', page);
+            window.location.search = params.toString();
+        }
+    </script>
+    """,
+    unsafe_allow_html=True,
+)
+
+page = st.experimental_get_query_params().get('page', 'Home')
+# Displaying the content based on the selected page
+if page == 'Home':
+    st.title('Home Page')
+    # Add content for the Home page
+elif page == 'Data':
+    st.title('View the Data')
+    # Load and display the 'temperature.csv' data
+    data = pd.read_csv('temperature_data.csv')
+    st.write("Temperature Data")
+    st.dataframe(data)
+elif page == 'Visualizations':
+    st.title('Visualizations Page')
+    # Add content for the Visualizations page
+elif page == 'Acknowledgment':
+    st.title('Acknowledgment Page')
+    # Add content for the Acknowledgment page
+
+
+#selected_page = st.sidebar.radio(
+#    "Navigation",
+#    ("🏠 Home", "📈 Data", "📊 Visualizations", "🙏 Acknowledgment"),
+#    index=0,
+#)
+
 
 description_style = """
     font-size: 18px;
