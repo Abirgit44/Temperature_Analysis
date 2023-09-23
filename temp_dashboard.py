@@ -14,11 +14,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from streamlit_pandas_profiling import st_profile_report
 
-# Define page functions
 
 
 def home_page():
-    # Add content for the Home page
+
     st.markdown(
         """
     <h1 align="center">
@@ -130,18 +129,14 @@ def data_page():
 
     # Load and display the 'temperature_data.csv' data
     data = load_data()
-    # st.dataframe(data)
-
-
-    # Display the styled DataFrame
-    st.write(data, unsafe_allow_html=True)
+    st.dataframe(data)
 
     st.markdown(
         """
         <h2 style="color: #4A90E2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
             Summary of the Dataset
         </h2>
-    """,
+        """,
         unsafe_allow_html=True,
     )
 
@@ -190,7 +185,7 @@ def data_page():
 
 
 def visualizations_page():
-    # Set the title of the app
+    
     st.title("Temperature Data Dashboard :bar_chart:")
     # Select a visualization option
     visualization_option = st.selectbox(
@@ -501,7 +496,6 @@ def visualizations_page():
         </div>""",
             unsafe_allow_html=True,
         )
-        # Create a violin plot
         fig = px.violin(data, x="YEAR", y="ANNUAL", box=True, points="all")
         st.plotly_chart(fig)
 
