@@ -131,22 +131,10 @@ def data_page():
     # Load and display the 'temperature_data.csv' data
     data = load_data()
     # st.dataframe(data)
-    @st.cache(allow_output_mutation=True)
-    def style_data():
-        return data.style.set_properties(
-            **{
-                "background-color": "#EFEFEF",
-                "color": "#191970",
-                "border-color": "#191970",
-            }
-        ).set_precision(
-            2
-        )  # Adjust the precision of floating-point numbers as needed
 
-    styled_data = style_data()
 
     # Display the styled DataFrame
-    st.write(styled_data, unsafe_allow_html=True)
+    st.write(data, unsafe_allow_html=True)
 
     st.markdown(
         """
@@ -588,11 +576,8 @@ html_content = """
     }
 </style>
 <h1 align="center">
-    <span style="font-size: 1.2em; color: #FFFF00; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">🙏 Acknowledgments 🙏</span>
+    <span style="font-size: 1.2em; color: #FFFF00; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"> Acknowledgments </span>
 </h1>
-<p align="center">
-    <span style="font-size: 1.5em; color: #B39CEB; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Acknowledging the Brilliant Mind Behind This App</span>
-</p>
 <div align="center">
     <div class="animated-block">
         <h2 align="center">
