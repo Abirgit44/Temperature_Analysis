@@ -6,7 +6,6 @@ Created on Mon Sep  4 22:13:29 2023
 """
 import streamlit as st
 import pandas as pd
-from pandas_profiling import ProfileReport
 import plotly.express as px
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
@@ -376,79 +375,94 @@ def visualizations_page():
                             color_continuous_scale='Viridis')
         st.plotly_chart(fig)
 
-def acknowledgment_page():
-    st.markdown("""
-     <h1 align="center">
-          <span style="font-size: 1.2em; color: #4A90E2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
-            🙏 Acknowledgments 🙏
-          </span>
-        </h1>
+html_content = """
+<style>
+    .animated-block span {
+        opacity: 0;
+        animation: fadeIn 1s ease-in-out forwards;
+    }
 
-        <p align="center">
-          <span style="font-size: 1.5em; color: #FFD700; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
-            Acknowledging the Brilliant Mind Behind This App
-          </span>
-        </p>
-        <div align="center">
-            <div style="border: 2px solid #4A90E2; border-radius: 10px; padding: 20px; background-color: #EFEFEF; box-shadow: 0px 0px 20px #4A90E2;">
-                <h2 align="center">
-                    <span style="font-size: 1.8em; color: #4A90E2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
-                        About the Creator
-                    </span>
-                </h2>
-                <p align="center">
-                    <img src="images/myphoto.jpg" alt="Your Photo" width="150" height="150">
-                </p>
-                <p align="center">
-                    <span style="font-size: 1.3em; color: #FC0344; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
-                        Hello, I'm Abir Maiti!
-                    </span>
-                </p>
-                <p align="center">
-                    <span style="font-size: 1.2em; color: #191970; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
-                        A Passionate Data Scientist and AI enthusiast
-                    </span>
-                </p>
-                <p align="center">
-                    <span style="font-size: 1.2em; color: #191970; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
-                        Bringing Data to Life Through Visualization
-                    </span>
-                </p>
-                <p align="center">
-                    <span style="font-size: 1.3em; color: #FC0344; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
-                        A results-driven and analytical individual with a strong background in data science along with Python, SQL, MS Excel, and Tableau.
-                        I like to listen to music, study new technology news, delve into history and culture etc in my spare time.
-                        Connect with me using the below links.
-                    </span>
-                </p>
-                <p align="center">
-                    <a href="https://bit.ly/Abirgit44" style="text-decoration: none;">
-                        <img src="https://img.shields.io/badge/GitHub-Profile-blue?logo=github" alt="GitHub Profile">
-                    </a>
-                </p>
-                <p align="center">
-                    <a href="https://bit.ly/linkAbir" style="text-decoration: none;">
-                        <img src="https://img.shields.io/badge/LinkedIn-Profile-blue?logo=linkedin" alt="LinkedIn Profile">
-                    </a>
-                </p>
-            </div>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    .card {
+        border: 2px solid #4A90E2;
+        border-radius: 10px;
+        padding: 20px;
+        background-color: #EFEFEF;
+        box-shadow: 0px 0px 20px #4A90E2;
+    }
+
+    .glowing {
+        animation: glow 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+        0% {
+            box-shadow: 0px 0px 20px #4A90E2;
+        }
+        100% {
+            box-shadow: 0px 0px 40px #4A90E2, 0px 0px 60px #4A90E2;
+        }
+    }
+</style>
+<h1 align="center">
+    <span style="font-size: 1.2em; color: #FFFF00; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">🙏 Acknowledgments 🙏</span>
+</h1>
+<p align="center">
+    <span style="font-size: 1.5em; color: #B39CEB; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Acknowledging the Brilliant Mind Behind This App</span>
+</p>
+<div align="center">
+    <div class="animated-block">
+        <h2 align="center">
+            <span style="font-size: 1.8em; color: #191970; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">About the Creator</span>
+        </h2>
+        <hr>
+        <div class="card glowing">
+            <p align="center">
+                <span style="font-size: 1.3em; color: #FC0344; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Hello, I'm Abir Maiti!</span>
+            </p>
+            <p align="center">
+                <span style="font-size: 1.2em; color: #4A90E2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">A Passionate Data Scientist and AI enthusiast</span>
+            </p>
+            <p align="center">
+                <span style="font-size: 1.2em; color: #4A90E2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Bringing Data to Life Through Visualization</span>
+            </p>
+            <p align="center">
+                <span style="font-size: 1.3em; color: #FC0344; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
+                    A results-driven and analytical individual with a strong background in data science along with Python, SQL, MS Excel, and Tableau. I like to listen to music, study new technology news, delve into history and culture, etc., in my spare time. Connect with me using the below links.
+                </span>
+            </p>
+            <p align="center">
+                <a href="https://bit.ly/Abirgit44" style="text-decoration: none;">
+                    <img src="https://img.shields.io/badge/GitHub-Profile-blue?logo=github" alt="GitHub Profile">
+                </a>
+            </p>
+            <p align="center">
+                <a href="https://bit.ly/linkAbir" style="text-decoration: none;">
+                    <img src="https://img.shields.io/badge/LinkedIn-Profile-blue?logo=linkedin" alt="LinkedIn Profile">
+                </a>
+            </p>
         </div>
+    </div>
+</div>
+<hr style="height: 2px; border-width: 0; color: #191970; background-color: #191970; opacity: 0.8;">
+<p align="center">
+    <span style="font-size: 1.2em; color: #FFFF00; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Thank you for exploring this app!</span>
+</p>
+<p align="center">
+    <span style="font-size: 1.2em; color: #FC0344; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Your support and curiosity drive its success!</span>
+</p>
+"""
 
 
-        <hr style="height: 2px; border-width: 0; color: #4A90E2; background-color: #4A90E2; opacity: 0.8;">
-
-        <p align="center">
-          <span style="font-size: 1.2em; color: #FFFFFF; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
-            Thank you for exploring this app!
-          </span>
-        </p>
-
-        <p align="center">
-          <span style="font-size: 1.2em; color: #FFD700; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
-            Your support and curiosity drive its success!
-          </span>
-        </p>
-        """,unsafe_allow_html=True)
+def acknowledgment_page():
+    st.markdown(html_content, unsafe_allow_html=True)
 
 
 # Create a dictionary to map page names to functions
@@ -460,10 +474,10 @@ pages = {
 }
 
 # Create a sidebar with page selection using a selectbox
-st.sidebar.markdown("""<h2 style="color: #4A90E2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); font-size: 24px; animation: glow 2s infinite;">Navigation Pane</h2>
+st.sidebar.markdown("""<h2 style="color: #4A90E2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); font-size: 24px; animation: glowe 2s infinite;">Navigation Pane</h2>
 
 <style>
-  @keyframes glow {
+  @keyframes glowe {
     0% {
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
@@ -510,6 +524,7 @@ def visualizations_page_sidebar():
     <p style="font-size: 18px; color: #EFEFEF; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); opacity: 0.8;">
         Immerse yourself in a spectrum of temperature insights. From animated heatmaps to violin plots,
         these visualizations unveil patterns and trends in temperature data. 🌡️
+        <strong>Choose your preferred visualizations from the <i>selectbox</i> in the main page.</strong>
     </p>
     """,unsafe_allow_html=True)
 
