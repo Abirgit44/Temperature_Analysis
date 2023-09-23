@@ -16,9 +16,11 @@ from streamlit_pandas_profiling import st_profile_report
 
 # Define page functions
 
+
 def home_page():
     # Add content for the Home page
-    st.markdown("""
+    st.markdown(
+        """
     <h1 align="center">
       <span style="font-size: 2.5em; color: #4A90E2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
          Temperature Explorer 🌡️
@@ -88,18 +90,23 @@ def home_page():
         📊 Created with love for data enthusiasts!
       </span>
     </p>
-    """,unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
+
 
 # Load the dataset
 @st.cache(allow_output_mutation=True)
 def load_data():
-    data = pd.read_csv('temperature_data.csv', encoding='ISO-8859-1')
+    data = pd.read_csv("temperature_data.csv", encoding="ISO-8859-1")
     data.dropna(inplace=True)
     data.reset_index(drop=True, inplace=True)
     return data
 
+
 def data_page():
-    st.markdown("""
+    st.markdown(
+        """
     <div align="center">
       <div style="border: 2px solid #191970; border-radius: 10px; padding: 20px; background-color: #B2FBD6; box-shadow: 0px 0px 20px #191970;">
         <h2 align="center">
@@ -117,34 +124,49 @@ def data_page():
         </div>
       </div>
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
     # Load and display the 'temperature_data.csv' data
     data = load_data()
-    #st.dataframe(data)
+    # st.dataframe(data)
     @st.cache(allow_output_mutation=True)
     def style_data():
         return data.style.set_properties(
-            **{'background-color': '#EFEFEF', 'color': '#191970', 'border-color': '#191970'}
-        ).set_precision(2)  # Adjust the precision of floating-point numbers as needed
+            **{
+                "background-color": "#EFEFEF",
+                "color": "#191970",
+                "border-color": "#191970",
+            }
+        ).set_precision(
+            2
+        )  # Adjust the precision of floating-point numbers as needed
 
     styled_data = style_data()
 
     # Display the styled DataFrame
     st.write(styled_data, unsafe_allow_html=True)
 
-    st.markdown("""
+    st.markdown(
+        """
         <h2 style="color: #4A90E2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
             Summary of the Dataset
         </h2>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
     def format_data_types(data):
         dtypes = data.dtypes
-        formatted_types = [f"{col}: {dtype}" for col, dtype in zip(data.columns, dtypes)]
+        formatted_types = [
+            f"{col}: {dtype}" for col, dtype in zip(data.columns, dtypes)
+        ]
         return formatted_types
+
     # Display data types in the first row and summary in the second row
-    st.markdown("""
+    st.markdown(
+        """
     <div style="display: flex; flex-direction: column;">
         <div style="flex: 1;">
             <div style="color: #FFD700; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); padding: 10px;">
@@ -164,22 +186,43 @@ def data_page():
             </div>
         </div>
     </div>
-    """.format("<table><tr><th>Column</th><th>Data Type</th></tr>" + "".join([f"<tr><td>{col.strip()}</td><td>{str(dtype).strip()}</td></tr>" for col, dtype in zip(data.columns, data.dtypes)]) + "</table>",
-               data.describe().to_html(classes=["dataframe"], header="true")), unsafe_allow_html=True)
-
-
-
-
+    """.format(
+            "<table><tr><th>Column</th><th>Data Type</th></tr>"
+            + "".join(
+                [
+                    f"<tr><td>{col.strip()}</td><td>{str(dtype).strip()}</td></tr>"
+                    for col, dtype in zip(data.columns, data.dtypes)
+                ]
+            )
+            + "</table>",
+            data.describe().to_html(classes=["dataframe"], header="true"),
+        ),
+        unsafe_allow_html=True,
+    )
 
 
 def visualizations_page():
     # Set the title of the app
-    st.title('Temperature Data Dashboard :bar_chart:')
+    st.title("Temperature Data Dashboard :bar_chart:")
     # Select a visualization option
-    visualization_option = st.selectbox('Select a Visualization', ('Monthly Trends', 'Heatmap', 'Line Trend', 'Seasonal Decomposition', '3D Surface Plot with Contours', 'Parallel Coordinates', 'Polar Scatter', 'Animated Heatmap','Histogram of Annual Temperature','Time Series Plot','Overall temperature distributions','Box Plot of Monthly Temperatures','3D Scatter Plot of Annual Temperature Trends'))
-
-
-
+    visualization_option = st.selectbox(
+        "Select a Visualization",
+        (
+            "Monthly Trends",
+            "Heatmap",
+            "Line Trend",
+            "Seasonal Decomposition",
+            "3D Surface Plot with Contours",
+            "Parallel Coordinates",
+            "Polar Scatter",
+            "Animated Heatmap",
+            "Histogram of Annual Temperature",
+            "Time Series Plot",
+            "Overall temperature distributions",
+            "Box Plot of Monthly Temperatures",
+            "3D Scatter Plot of Annual Temperature Trends",
+        ),
+    )
 
     data = load_data()
 
@@ -194,186 +237,319 @@ def visualizations_page():
         margin-right: 10px;
     """
 
-
-
-    if visualization_option == 'Monthly Trends':
-        st.header('Monthly Temperature Trends')
-        st.markdown("""
+    if visualization_option == "Monthly Trends":
+        st.header("Monthly Temperature Trends")
+        st.markdown(
+            """
         <span style="{}">📊 Explore the monthly temperature trends over the years.</span>
-        """.format(description_style), unsafe_allow_html=True)
+        """.format(
+                description_style
+            ),
+            unsafe_allow_html=True,
+        )
         fig = go.Figure()
 
         # Add traces for each month
         for month in data.columns[1:13]:
-            fig.add_trace(go.Scatter(x=data['YEAR'], y=data[month], mode='lines', name=month))
+            fig.add_trace(
+                go.Scatter(x=data["YEAR"], y=data[month], mode="lines", name=month)
+            )
 
         # Update layout
-        fig.update_layout(title='Interactive Time Series Plot with Range Selector')
-        fig.update_xaxes(title='Year', rangeslider_visible=True)
+        fig.update_layout(title="Interactive Time Series Plot with Range Selector")
+        fig.update_xaxes(title="Year", rangeslider_visible=True)
 
         # Display the plot
         st.plotly_chart(fig)
 
-    elif visualization_option == 'Heatmap':
-        st.header('Monthly Temperature Heatmap')
-        st.markdown("""
+    elif visualization_option == "Heatmap":
+        st.header("Monthly Temperature Heatmap")
+        st.markdown(
+            """
         <span style="{}">🌡️ The heatmap provides a visual representation of temperature data over time.</span></br>
         <span style="{}">Whiter shades represent higher temperatures, while bluish shades indicate cooler temperatures.</span>
-        """.format(description_style, emoji_style), unsafe_allow_html=True)
-        heatmap_data = data[['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']]
-        fig_heatmap = go.Figure(data=go.Heatmap(z=heatmap_data.values, x=heatmap_data.columns, y=data['YEAR']))
-        fig_heatmap.update_layout(title='Monthly Temperature Heatmap')
+        """.format(
+                description_style, emoji_style
+            ),
+            unsafe_allow_html=True,
+        )
+        heatmap_data = data[
+            [
+                "JAN",
+                "FEB",
+                "MAR",
+                "APR",
+                "MAY",
+                "JUN",
+                "JUL",
+                "AUG",
+                "SEP",
+                "OCT",
+                "NOV",
+                "DEC",
+            ]
+        ]
+        fig_heatmap = go.Figure(
+            data=go.Heatmap(
+                z=heatmap_data.values, x=heatmap_data.columns, y=data["YEAR"]
+            )
+        )
+        fig_heatmap.update_layout(title="Monthly Temperature Heatmap")
         st.plotly_chart(fig_heatmap)
 
-    elif visualization_option == 'Line Trend':
-            st.header('Temperature Trend Visualization')
-            st.markdown("""
+    elif visualization_option == "Line Trend":
+        st.header("Temperature Trend Visualization")
+        st.markdown(
+            """
             <span style="{}">🎻 Visualize temperature distributions over time based on violin plotting concept.</span></br>
             <span style="{}">It shows the spread of temperature values for each year.</span>
-            """.format(description_style, emoji_style), unsafe_allow_html=True)
+            """.format(
+                description_style, emoji_style
+            ),
+            unsafe_allow_html=True,
+        )
 
-            # Create a violin plot
-            fig = px.violin(data, x='YEAR', y='ANNUAL', box=True, points="all")
+        # Create a violin plot
+        fig = px.violin(data, x="YEAR", y="ANNUAL", box=True, points="all")
 
-            # Calculate the mean
-            mean_data = data.groupby('YEAR')['ANNUAL'].mean().reset_index()
+        # Calculate the mean
+        mean_data = data.groupby("YEAR")["ANNUAL"].mean().reset_index()
 
-            # Create a trace for the mean
-            mean_trace = px.line(mean_data, x='YEAR', y='ANNUAL', labels={'YEAR': 'Year', 'ANNUAL': 'Mean'})
-            fig.add_trace(mean_trace.data[0])
+        # Create a trace for the mean
+        mean_trace = px.line(
+            mean_data, x="YEAR", y="ANNUAL", labels={"YEAR": "Year", "ANNUAL": "Mean"}
+        )
+        fig.add_trace(mean_trace.data[0])
 
-            # Customize the appearance of the plot
-            fig.update_traces(marker=dict(size=4, opacity=0.5),
-                              line_color='red', fillcolor='lightblue')
+        # Customize the appearance of the plot
+        fig.update_traces(
+            marker=dict(size=4, opacity=0.5), line_color="red", fillcolor="lightblue"
+        )
 
-            # Customize layout options
-            fig.update_layout(title='Plot of Annual Temperature Trends with Mean',
-                              xaxis_title='Year',
-                              yaxis_title='Annual Temperature',
-                              font=dict(size=12),
-                              template='plotly_white')
+        # Customize layout options
+        fig.update_layout(
+            title="Plot of Annual Temperature Trends with Mean",
+            xaxis_title="Year",
+            yaxis_title="Annual Temperature",
+            font=dict(size=12),
+            template="plotly_white",
+        )
 
-            # Display the plot
-            st.plotly_chart(fig)
+        # Display the plot
+        st.plotly_chart(fig)
 
-
-
-    elif visualization_option == 'Seasonal Decomposition':
-        st.header('Seasonal Decomposition')
-        st.markdown("""
+    elif visualization_option == "Seasonal Decomposition":
+        st.header("Seasonal Decomposition")
+        st.markdown(
+            """
         <span style="{}">📈 Seasonal decomposition breaks down temperature data into its components: trend, seasonal, and residual.</span></br>
         <span style="{}">It helps identify recurring patterns and anomalies.</span>
-        """.format(description_style, emoji_style), unsafe_allow_html=True)
-        decomposition = seasonal_decompose(data['ANNUAL'], model='additive', period=12)
+        """.format(
+                description_style, emoji_style
+            ),
+            unsafe_allow_html=True,
+        )
+        decomposition = seasonal_decompose(data["ANNUAL"], model="additive", period=12)
         fig_seasonal = go.Figure()
-        fig_seasonal.add_trace(go.Scatter(x=data['YEAR'], y=decomposition.trend, mode='lines', name='Trend'))
-        fig_seasonal.add_trace(go.Scatter(x=data['YEAR'], y=decomposition.seasonal, mode='lines', name='Seasonal'))
-        fig_seasonal.add_trace(go.Scatter(x=data['YEAR'], y=decomposition.resid, mode='lines', name='Residual'))
-        fig_seasonal.update_layout(title='Seasonal Decomposition of Annual Temperature')
+        fig_seasonal.add_trace(
+            go.Scatter(
+                x=data["YEAR"], y=decomposition.trend, mode="lines", name="Trend"
+            )
+        )
+        fig_seasonal.add_trace(
+            go.Scatter(
+                x=data["YEAR"], y=decomposition.seasonal, mode="lines", name="Seasonal"
+            )
+        )
+        fig_seasonal.add_trace(
+            go.Scatter(
+                x=data["YEAR"], y=decomposition.resid, mode="lines", name="Residual"
+            )
+        )
+        fig_seasonal.update_layout(title="Seasonal Decomposition of Annual Temperature")
         st.plotly_chart(fig_seasonal)
 
-
-
-
-    elif visualization_option == '3D Surface Plot with Contours':
-        st.header('3D Surface Plot with Contours')
-        st.markdown("""
+    elif visualization_option == "3D Surface Plot with Contours":
+        st.header("3D Surface Plot with Contours")
+        st.markdown(
+            """
         <span style="{}">🌋 Explore temperature trends in a 3D surface plot with contour lines.</span></br>
         <span style="{}">Contours help visualize temperature changes over time.</span>
-        """.format(description_style, emoji_style), unsafe_allow_html=True)
-        fig = go.Figure(data=[
-            go.Surface(z=data.iloc[:, 1:13].values, colorscale='Viridis')
-        ])
+        """.format(
+                description_style, emoji_style
+            ),
+            unsafe_allow_html=True,
+        )
+        fig = go.Figure(
+            data=[go.Surface(z=data.iloc[:, 1:13].values, colorscale="Viridis")]
+        )
 
         # Add contour lines
-        fig.update_traces(contours_z=dict(show=True, usecolormap=True,
-                                          highlightcolor="limegreen", project_z=True))
+        fig.update_traces(
+            contours_z=dict(
+                show=True, usecolormap=True, highlightcolor="limegreen", project_z=True
+            )
+        )
 
-        fig.update_layout(scene=dict(zaxis_title='Temperature'), title='3D Surface Plot of Monthly Temperature Trends with Contours')
+        fig.update_layout(
+            scene=dict(zaxis_title="Temperature"),
+            title="3D Surface Plot of Monthly Temperature Trends with Contours",
+        )
         st.plotly_chart(fig)
 
-    elif visualization_option == 'Parallel Coordinates':
-        st.header('Parallel Coordinates Plot')
-        st.markdown("""
+    elif visualization_option == "Parallel Coordinates":
+        st.header("Parallel Coordinates Plot")
+        st.markdown(
+            """
         <span style="{}">🌐 Visualize the relationship between multiple temperature attributes using parallel coordinates.</span></br>
         <span style="{}">It's a great way to spot patterns and trends.</span>
-        """.format(description_style, emoji_style), unsafe_allow_html=True)
-        fig = px.parallel_coordinates(data, dimensions=data.columns[1:13], color='ANNUAL',
-                                      color_continuous_scale=px.colors.sequential.Viridis,
-                                      title='Parallel Coordinates Plot of Monthly Temperature Trends')
+        """.format(
+                description_style, emoji_style
+            ),
+            unsafe_allow_html=True,
+        )
+        fig = px.parallel_coordinates(
+            data,
+            dimensions=data.columns[1:13],
+            color="ANNUAL",
+            color_continuous_scale=px.colors.sequential.Viridis,
+            title="Parallel Coordinates Plot of Monthly Temperature Trends",
+        )
         st.plotly_chart(fig)
 
-    elif visualization_option == 'Polar Scatter':
-        st.header('Polar Scatter Plot')
-        st.markdown("""
+    elif visualization_option == "Polar Scatter":
+        st.header("Polar Scatter Plot")
+        st.markdown(
+            """
         <span style="{}">🌟 Discover temperature patterns with a polar scatter plot.</span></br>
         <span style="{}">The radial axis represents temperature values, and the angular axis represents months.</span>
-        """.format(description_style, emoji_style), unsafe_allow_html=True)
-        fig = px.scatter_polar(data, r=data.columns[1:13], theta=data.columns[1:13],
-                               title='Polar Scatter Plot of Monthly Temperature Trends')
-        fig.update_layout(polar=dict(radialaxis=dict(title='Temperature')))
+        """.format(
+                description_style, emoji_style
+            ),
+            unsafe_allow_html=True,
+        )
+        fig = px.scatter_polar(
+            data,
+            r=data.columns[1:13],
+            theta=data.columns[1:13],
+            title="Polar Scatter Plot of Monthly Temperature Trends",
+        )
+        fig.update_layout(polar=dict(radialaxis=dict(title="Temperature")))
         st.plotly_chart(fig)
 
-    elif visualization_option == 'Animated Heatmap':
-        st.header('Animated Heatmap')
-        st.markdown("""
+    elif visualization_option == "Animated Heatmap":
+        st.header("Animated Heatmap")
+        st.markdown(
+            """
         <span style="{}">🎥 Watch temperature changes over time with an animated heatmap.</span></br>
         <span style="{}">It's an intuitive way to see how temperatures evolve.</span>
-        """.format(description_style, emoji_style), unsafe_allow_html=True)
-        heatmap_data = data[['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']].values.T
-        fig = px.imshow(heatmap_data, labels=dict(x='Year', y='Month', color='Temperature'),
-                        x=data['YEAR'], y=data.columns[1:13], color_continuous_scale='Viridis',
-                        title='Animated Heatmap of Monthly Temperature Trends Over the Years')
-        fig.update_xaxes(type='category')
+        """.format(
+                description_style, emoji_style
+            ),
+            unsafe_allow_html=True,
+        )
+        heatmap_data = data[
+            [
+                "JAN",
+                "FEB",
+                "MAR",
+                "APR",
+                "MAY",
+                "JUN",
+                "JUL",
+                "AUG",
+                "SEP",
+                "OCT",
+                "NOV",
+                "DEC",
+            ]
+        ].values.T
+        fig = px.imshow(
+            heatmap_data,
+            labels=dict(x="Year", y="Month", color="Temperature"),
+            x=data["YEAR"],
+            y=data.columns[1:13],
+            color_continuous_scale="Viridis",
+            title="Animated Heatmap of Monthly Temperature Trends Over the Years",
+        )
+        fig.update_xaxes(type="category")
         st.plotly_chart(fig)
 
-    elif visualization_option == 'Histogram of Annual Temperature':
-        st.subheader('Histogram of Annual Temperature')
-        st.markdown("""<div style="font-size: 18px; color: #3366ff; margin-bottom: 10px;">
+    elif visualization_option == "Histogram of Annual Temperature":
+        st.subheader("Histogram of Annual Temperature")
+        st.markdown(
+            """<div style="font-size: 18px; color: #3366ff; margin-bottom: 10px;">
             📊 Visualize temperature distributions over time using a histogram plot.
-        </div>""",unsafe_allow_html=True)
-        fig_hist = px.histogram(data, x='ANNUAL', title='Histogram of Annual Temperature')
+        </div>""",
+            unsafe_allow_html=True,
+        )
+        fig_hist = px.histogram(
+            data, x="ANNUAL", title="Histogram of Annual Temperature"
+        )
         st.plotly_chart(fig_hist)
 
-
-    elif visualization_option == 'Time Series Plot':
-        st.subheader('Interactive Time Series Plot')
-        st.markdown("""<div style="font-size: 18px; color: #3366ff; margin-bottom: 10px;">
+    elif visualization_option == "Time Series Plot":
+        st.subheader("Interactive Time Series Plot")
+        st.markdown(
+            """<div style="font-size: 18px; color: #3366ff; margin-bottom: 10px;">
             📈 Explore an interactive time series plot of annual temperature data.
-        </div>""",unsafe_allow_html=True)
-        data['YEAR'] = pd.to_datetime(data['YEAR'], format='%Y')
-        fig_timeseries = px.line(data, x='YEAR', y='ANNUAL', title='Interactive Time Series Plot of Annual Temperature')
+        </div>""",
+            unsafe_allow_html=True,
+        )
+        data["YEAR"] = pd.to_datetime(data["YEAR"], format="%Y")
+        fig_timeseries = px.line(
+            data,
+            x="YEAR",
+            y="ANNUAL",
+            title="Interactive Time Series Plot of Annual Temperature",
+        )
         st.plotly_chart(fig_timeseries)
 
-    elif visualization_option == 'Overall temperature distributions':
-        st.subheader('Overall temperature distributions')
-        st.markdown("""<div style="font-size: 18px; color: #3366ff; margin-bottom: 10px;">
+    elif visualization_option == "Overall temperature distributions":
+        st.subheader("Overall temperature distributions")
+        st.markdown(
+            """<div style="font-size: 18px; color: #3366ff; margin-bottom: 10px;">
             🎻 Visualize overall temperature distributions using a violin plot.
-        </div>""",unsafe_allow_html=True)
+        </div>""",
+            unsafe_allow_html=True,
+        )
         # Create a violin plot
-        fig = px.violin(data, x='YEAR', y='ANNUAL', box=True, points="all")
+        fig = px.violin(data, x="YEAR", y="ANNUAL", box=True, points="all")
         st.plotly_chart(fig)
 
-
-
-    elif visualization_option == 'Box Plot of Monthly Temperatures':
+    elif visualization_option == "Box Plot of Monthly Temperatures":
         plt.figure(figsize=(10, 6))
-        sns.boxplot(data=data.iloc[:, 1:13], orient='v', palette='Set2', showfliers=True)
-        plt.title('Box Plot of Monthly Temperatures with Outliers')
-        st.markdown("""<div style="font-size: 18px; color: #3366ff; margin-bottom: 10px;">
+        sns.boxplot(
+            data=data.iloc[:, 1:13], orient="v", palette="Set2", showfliers=True
+        )
+        plt.title("Box Plot of Monthly Temperatures with Outliers")
+        st.markdown(
+            """<div style="font-size: 18px; color: #3366ff; margin-bottom: 10px;">
             🌐 Visualize monthly temperature distributions with a box plot.
-        </div>""",unsafe_allow_html=True)
-        st.set_option('deprecation.showPyplotGlobalUse', False)
+        </div>""",
+            unsafe_allow_html=True,
+        )
+        st.set_option("deprecation.showPyplotGlobalUse", False)
         st.pyplot()
 
-    elif visualization_option == '3D Scatter Plot of Annual Temperature Trends':
-        st.subheader('3D Scatter Plot of Annual Temperature Trends')
-        st.markdown("""<div style="font-size: 18px; color: #3366ff; margin-bottom: 10px;">
+    elif visualization_option == "3D Scatter Plot of Annual Temperature Trends":
+        st.subheader("3D Scatter Plot of Annual Temperature Trends")
+        st.markdown(
+            """<div style="font-size: 18px; color: #3366ff; margin-bottom: 10px;">
             🌋 Explore a 3D scatter plot of annual temperature trends.
-        </div>""",unsafe_allow_html=True)
-        fig = px.scatter_3d(data, x='YEAR', y='ANNUAL', z='ANNUAL', color='ANNUAL',
-                            color_continuous_scale='Viridis')
+        </div>""",
+            unsafe_allow_html=True,
+        )
+        fig = px.scatter_3d(
+            data,
+            x="YEAR",
+            y="ANNUAL",
+            z="ANNUAL",
+            color="ANNUAL",
+            color_continuous_scale="Viridis",
+        )
         st.plotly_chart(fig)
+
 
 html_content = """
 <style>
@@ -474,7 +650,8 @@ pages = {
 }
 
 # Create a sidebar with page selection using a selectbox
-st.sidebar.markdown("""<h2 style="color: #4A90E2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); font-size: 24px; animation: glowe 2s infinite;">Navigation Pane</h2>
+st.sidebar.markdown(
+    """<h2 style="color: #4A90E2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); font-size: 24px; animation: glowe 2s infinite;">Navigation Pane</h2>
 
 <style>
   @keyframes glowe {
@@ -489,7 +666,9 @@ st.sidebar.markdown("""<h2 style="color: #4A90E2; text-shadow: 2px 2px 4px rgba(
     }
   }
 </style>
-""",unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 selected_page = st.sidebar.selectbox("Go to", list(pages.keys()))
 
 # Display the selected page content
@@ -497,7 +676,8 @@ pages[selected_page]()
 
 # Custom content for each page in the sidebar
 def home_page_sidebar():
-    st.sidebar.markdown("""<p style="font-size: 18px; color: #FFD700; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
+    st.sidebar.markdown(
+        """<p style="font-size: 18px; color: #FFD700; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
         <span style="font-size: 28px; margin-right: 10px;">🏠</span> Welcome to the Temperature Explorer!
     </p>
     <p style="font-size: 16px; color: #EFEFEF; margin-top: 10px;">
@@ -505,10 +685,14 @@ def home_page_sidebar():
         Explore, visualize, and analyze temperatures from 1901 to 2021.
         Uncover seasonal patterns, trends, and more in this user-friendly app.
     </p>
-    """,unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
+
 
 def data_page_sidebar():
-    st.sidebar.markdown("""
+    st.sidebar.markdown(
+        """
     <p style="font-size: 18px; color: #4A90E2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
         <span style="font-size: 28px; margin-right: 10px;">📈</span> Dive into the heart of the dataset!
     </p>
@@ -516,27 +700,38 @@ def data_page_sidebar():
         The Data Page provides access to the treasure trove of temperature data spanning 1901-2021.
         Discover rich insights, statistics, and visualizations in this extensive dataset sourced from IMD Pune via <a href="https://data.gov.in/" style="text-decoration: none; color: #4A90E2;">data.gov.in</a>.
     </p>
-    """,unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
+
 
 def visualizations_page_sidebar():
-    st.sidebar.markdown("""
+    st.sidebar.markdown(
+        """
     <p style="font-size: 24px; color: #4A90E2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">📊 Explore Temperature Data Visually</p>
     <p style="font-size: 18px; color: #EFEFEF; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); opacity: 0.8;">
         Immerse yourself in a spectrum of temperature insights. From animated heatmaps to violin plots,
         these visualizations unveil patterns and trends in temperature data. 🌡️
         <strong>Choose your preferred visualizations from the <i>selectbox</i> in the main page.</strong>
     </p>
-    """,unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
+
 
 def acknowledgment_page_sidebar():
-    st.sidebar.markdown("""<p style="font-size: 18px; color: #4A90E2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
+    st.sidebar.markdown(
+        """<p style="font-size: 18px; color: #4A90E2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
         <span style="font-size: 28px; margin-right: 10px;">🙏</span> Acknowledgments
     </p>
     <p style="font-size: 16px; color: #EFEFEF; margin-top: 10px;">
         This project was made possible by the my passion for the field of data science.
         Special thanks to the data provider, without whom this app would not be feasible. Your support fuels my commitment to environmental data exploration.
     </p>
-    """,unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
+
 
 # Create a dictionary to map page names to their respective sidebar content functions
 sidebar_content = {
