@@ -4,7 +4,7 @@
 
 **Explore the project live**:
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://svm-app.streamlit.app/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://temperature-analysis-eda.streamlit.app/)
 ---
 
 Explore the climate with dazzling visualizations and insights! 🌐 Discover temperature patterns, trends, and more! 📈 Dive into the data and embark on a journey of insights.
