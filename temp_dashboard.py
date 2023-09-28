@@ -623,9 +623,6 @@ html_content = """
 <p align="center">
     <span style="font-size: 1.2em; color: #FFFF00; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Thank you for exploring this app!</span>
 </p>
-<p align="center">
-    <span style="font-size: 1.2em; color: #FC0344; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Your support and curiosity drive its success!</span>
-</p>
 """
 
 
