@@ -127,13 +127,22 @@ def data_page():
         unsafe_allow_html=True,
     )
 
-    # Load and display the 'temperature_data.csv' data
-    data = load_data()
-    data['YEAR'] = data['YEAR'].apply(lambda x: f"{int(x)}")  # Format 'YEAR' column with no decimal places
-    for column in data.columns[1:]:
-        data[column] = data[column].apply(lambda x: f"{x:.1f}")  # Format other columns with one decimal place
+    def format_cell(cell):
+        try:
+            return f"{float(cell):.1f}"
+        except ValueError:
+            return cell
 
-    st.dataframe(data, height=500)
+    # Display the DataFrame with custom formatting
+    data = load_data()
+
+    # Apply the custom formatting function to the entire DataFrame
+    formatted_data = data.applymap(format_cell)
+
+    # Format 'YEAR' column as an integer
+    formatted_data['YEAR'] = data['YEAR'].astype(int)
+
+    st.dataframe(formatted_data, height=500)
     data_without_year = data.drop("YEAR", axis=1)
 
     st.markdown(
