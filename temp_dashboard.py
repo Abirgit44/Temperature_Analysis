@@ -129,7 +129,12 @@ def data_page():
 
     # Load and display the 'temperature_data.csv' data
     data = load_data()
-    st.dataframe(data)
+    data['YEAR'] = data['YEAR'].apply(lambda x: f"{int(x)}")  # Format 'YEAR' column with no decimal places
+    for column in data.columns[1:]:
+        data[column] = data[column].apply(lambda x: f"{x:.1f}")  # Format other columns with one decimal place
+
+    st.dataframe(data, height=500)
+    data_without_year = data.drop("YEAR", axis=1)
 
     st.markdown(
         """
@@ -178,14 +183,14 @@ def data_page():
                 ]
             )
             + "</table>",
-            data.describe().to_html(classes=["dataframe"], header="true"),
+            data_without_year.describe().to_html(classes=["dataframe"], header="true"),
         ),
         unsafe_allow_html=True,
     )
 
 
 def visualizations_page():
-    
+
     st.title("Temperature Data Dashboard :bar_chart:")
     # Select a visualization option
     visualization_option = st.selectbox(
