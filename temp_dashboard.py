@@ -133,13 +133,12 @@ def data_page():
         except ValueError:
             return cell
 
-    # Display the DataFrame with custom formatting
     data = load_data()
 
-    # Apply the custom formatting function to the entire DataFrame
+    # Applying the custom formatting function to the entire DataFrame
     formatted_data = data.applymap(format_cell)
 
-    # Format 'YEAR' column as an integer
+    # formatting 'YEAR' column as an integer
     formatted_data['YEAR'] = data['YEAR'].astype(int)
 
     st.dataframe(formatted_data, height=500)
